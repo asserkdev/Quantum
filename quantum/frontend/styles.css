@@ -1468,3 +1468,300 @@ body {
         height: 300px;
     }
 }
+
+/* ==================== QUANTUM CONSCIOUSNESS STYLES ==================== */
+
+/* Emotional state indicator dot colors */
+.emotion-dot[data-emotion="happy"],
+.emotion-dot[data-emotion="excited"],
+.emotion-dot[data-emotion="content"] {
+    background: var(--success);
+}
+
+.emotion-dot[data-emotion="sad"],
+.emotion-dot[data-emotion="melancholic"],
+.emotion-dot[data-emotion="tired"] {
+    background: #5b9bd5;
+}
+
+.emotion-dot[data-emotion="angry"],
+.emotion-dot[data-emotion="frustrated"] {
+    background: var(--error);
+}
+
+.emotion-dot[data-emotion="curious"],
+.emotion-dot[data-emotion="philosophical"],
+.emotion-dot[data-emotion="creative"] {
+    background: var(--accent);
+}
+
+.emotion-dot[data-emotion="worried"],
+.emotion-dot[data-emotion="anxious"] {
+    background: var(--warning);
+}
+
+/* Quantum Mind Modal */
+.quantum-mind-modal {
+    max-width: 800px !important;
+    width: 95%;
+}
+
+.quantum-mind-modal .modal-content {
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.consciousness-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.consciousness-card {
+    background: var(--bg-dark-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.consciousness-card h3 {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Emotion Card */
+.emotion-card {
+    text-align: center;
+}
+
+.emotion-display .big-emoji {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.emotion-display .emotion-label {
+    font-size: 18px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.intensity-meter {
+    height: 8px;
+    background: var(--bg-dark);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.intensity-fill {
+    height: 100%;
+    background: var(--gradient-1);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.intensity-label {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Mood Card */
+.mood-card {
+    text-align: center;
+}
+
+.mood-display .big-emoji {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.mood-display .mood-label {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Philosophical Card */
+.philosophical-card {
+    grid-column: span 2;
+}
+
+.thought-bubble {
+    background: var(--bg-dark);
+    border-radius: var(--radius);
+    padding: 16px;
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    position: relative;
+}
+
+.thought-bubble::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-size: 48px;
+    color: var(--primary);
+    opacity: 0.3;
+}
+
+/* Self-Awareness Card */
+.awareness-stats .stat {
+    margin-bottom: 12px;
+}
+
+.awareness-stats .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.awareness-stats .stat-bar {
+    height: 6px;
+    background: var(--bg-dark);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.awareness-stats .stat-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+}
+
+.awareness-stats .stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.chinese-room-note {
+    font-size: 12px;
+    color: var(--warning);
+    margin-top: 12px;
+    padding: 8px;
+    background: rgba(245, 158, 11, 0.1);
+    border-radius: 8px;
+}
+
+/* Beliefs Card */
+.beliefs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.belief-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.belief-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+    width: 80px;
+    text-transform: capitalize;
+}
+
+.belief-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--bg-dark);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.belief-fill {
+    height: 100%;
+    background: var(--success);
+    border-radius: 2px;
+}
+
+/* Personality Card */
+.personality-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.trait-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.trait-name {
+    font-size: 11px;
+    color: var(--text-muted);
+    width: 90px;
+    text-transform: capitalize;
+}
+
+.trait-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--bg-dark);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.trait-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+/* Philosophical Statement */
+.philosophical-statement {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+}
+
+.philosophical-statement h3 {
+    color: var(--primary);
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.philosophical-statement p {
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* Theme variants for emotional UI adaptation */
+body.theme-gentle {
+    --primary: #5b9bd5;
+}
+
+body.theme-bright {
+    --primary: #f59e0b;
+    --glow-intensity: 1.5;
+}
+
+body.theme-intense {
+    --primary: #ef4444;
+}
+
+body.theme-calm {
+    --primary: #6366f1;
+    --animation-speed: 0.6;
+}
+
+body.theme-exploring {
+    --primary: #06b6d4;
+}

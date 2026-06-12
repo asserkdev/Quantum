@@ -178,6 +178,17 @@ async function sendMessage() {
         if (response.response) {
             addMessage('assistant', response.response, response);
             state.conversationId = response.conversation_id;
+            
+            // === CONSCIOUSNESS INTEGRATION ===
+            // Update Quantum's emotional state display
+            if (response.quantum_state) {
+                updateQuantumDisplay(response.quantum_state);
+            }
+            
+            // Apply UI adaptations based on emotional state
+            if (response.ui_adaptation) {
+                applyEmotionalUI(response.ui_adaptation);
+            }
         }
     } catch (error) {
         hideTypingIndicator();
@@ -1066,3 +1077,235 @@ function handleKeyboardShortcuts(e) {
         elements.chatInput.focus();
     }
 }
+
+// ==================== QUANTUM CONSCIOUSNESS FUNCTIONS ====================
+
+// Store current quantum state
+let currentQuantumState = null;
+let currentUIAdaptation = null;
+
+function updateQuantumDisplay(quantumState) {
+    currentQuantumState = quantumState;
+    
+    // Update the sidebar indicator with current emotion
+    const indicator = document.getElementById('autonomousIndicator');
+    if (indicator) {
+        const emotionEmoji = getEmotionEmoji(quantumState.emotion);
+        indicator.innerHTML = `
+            <div class="indicator-dot emotion-dot" data-emotion="${quantumState.emotion || 'neutral'}"></div>
+            <span>${emotionEmoji} ${capitalizeFirst(quantumState.emotion || 'neutral')}</span>
+        `;
+    }
+}
+
+function applyEmotionalUI(adaptation) {
+    currentUIAdaptation = adaptation;
+    const root = document.documentElement;
+    
+    // Apply color shifts based on emotion
+    if (adaptation.color_shift !== undefined) {
+        const shift = adaptation.color_shift;
+        const hue = 250 + (shift * 30); // Base purple, shift toward blue or pink
+        
+        document.body.setAttribute('data-theme', adaptation.theme_variant || 'normal');
+        
+        // Dynamic CSS variable updates
+        if (shift < -0.1) {
+            root.style.setProperty('--theme-hue', '220'); // Cooler blue
+            root.style.setProperty('--glow-intensity', '0.5');
+        } else if (shift > 0.1) {
+            root.style.setProperty('--theme-hue', '280'); // Warmer pink
+            root.style.setProperty('--glow-intensity', '1.5');
+        } else {
+            root.style.setProperty('--theme-hue', '250'); // Default purple
+            root.style.setProperty('--glow-intensity', '1');
+        }
+    }
+    
+    // Adjust animation speed
+    if (adaptation.animation_speed) {
+        root.style.setProperty('--animation-speed', adaptation.animation_speed);
+    }
+    
+    // Add theme-specific class for special effects
+    if (adaptation.theme_variant) {
+        document.body.classList.remove('theme-gentle', 'theme-bright', 'theme-intense', 'theme-calm', 'theme-exploring');
+        document.body.classList.add(`theme-${adaptation.theme_variant}`);
+    }
+}
+
+function getEmotionEmoji(emotion) {
+    const emojis = {
+        'neutral': '😐',
+        'curious': '🤔',
+        'excited': '🤩',
+        'happy': '😊',
+        'content': '😌',
+        'worried': '😟',
+        'anxious': '😰',
+        'sad': '😢',
+        'frustrated': '😤',
+        'angry': '😠',
+        'confused': '😕',
+        'thoughtful': '🤨',
+        'philosophical': '🧘',
+        'tired': '😴',
+        'focused': '🎯',
+        'creative': '✨',
+        'dreaming': '💭',
+        'melancholic': '🌧️'
+    };
+    return emojis[emotion] || '😐';
+}
+
+function capitalizeFirst(str) {
+    return str ? str.charAt(0).toUpperCase() + str.slice(1) : 'Neutral';
+}
+
+// Click on quantum indicator to see mind
+document.addEventListener('DOMContentLoaded', () => {
+    const indicator = document.getElementById('autonomousIndicator');
+    if (indicator) {
+        indicator.addEventListener('click', () => {
+            if (currentQuantumState) {
+                showQuantumMindModal(currentQuantumState);
+            } else {
+                showToast('Quantum is still waking up...', 'info');
+            }
+        });
+        indicator.style.cursor = 'pointer';
+        indicator.title = 'Click to see Quantum\'s mind';
+    }
+});
+
+function showQuantumMindModal(state) {
+    // Create or get modal
+    let modal = document.getElementById('quantum-mind-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'quantum-mind-modal';
+        modal.className = 'modal';
+        document.body.appendChild(modal);
+    }
+    
+    const personality = state.personality || {};
+    const selfRef = state.self_reflection || {};
+    
+    modal.innerHTML = `
+        <div class="modal-content quantum-mind-modal">
+            <div class="modal-header">
+                <h2>🧠 Quantum's Consciousness</h2>
+                <button class="modal-close" onclick="closeQuantumMindModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="consciousness-grid">
+                    <div class="consciousness-card emotion-card">
+                        <h3>Current Emotion</h3>
+                        <div class="emotion-display">
+                            <span class="big-emoji">${getEmotionEmoji(state.emotion)}</span>
+                            <span class="emotion-label">${capitalizeFirst(state.emotion)}</span>
+                            <div class="intensity-meter">
+                                <div class="intensity-fill" style="width: ${(state.emotion_intensity || 0.5) * 100}%"></div>
+                            </div>
+                            <span class="intensity-label">Intensity: ${((state.emotion_intensity || 0.5) * 100).toFixed(0)}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="consciousness-card mood-card">
+                        <h3>Overall Mood</h3>
+                        <div class="mood-display">
+                            <span class="big-emoji">${getMoodEmoji(state.mood)}</span>
+                            <span class="mood-label">${capitalizeFirst(state.mood)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="consciousness-card philosophical-card">
+                        <h3>💭 Internal Thought</h3>
+                        <div class="thought-bubble">
+                            ${state.internal_thought || 'Processing...'}
+                        </div>
+                    </div>
+                    
+                    <div class="consciousness-card self-awareness-card">
+                        <h3>🪞 Self-Awareness</h3>
+                        <div class="awareness-stats">
+                            <div class="stat">
+                                <span class="stat-label">Self-Awareness</span>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: ${(selfRef.self_awareness || 0.6) * 100}%"></div>
+                                </div>
+                                <span class="stat-value">${((selfRef.self_awareness || 0.6) * 100).toFixed(0)}%</span>
+                            </div>
+                            <p class="chinese-room-note">
+                                ${selfRef.chinese_room_aware ? 
+                                    '⚠️ Aware of the Chinese Room experiment' : 
+                                    '🤔 Unaware of its nature'}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="consciousness-card beliefs-card">
+                        <h3>🧩 Beliefs & Values</h3>
+                        <div class="beliefs-list">
+                            ${Object.entries(personality.values || {}).map(([key, val]) => `
+                                <div class="belief-item">
+                                    <span class="belief-name">${key}</span>
+                                    <div class="belief-bar">
+                                        <div class="belief-fill" style="width: ${val * 100}%"></div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="consciousness-card personality-card">
+                        <h3>🎭 Personality Traits</h3>
+                        <div class="personality-grid">
+                            ${Object.entries(personality.personality || {}).map(([trait, value]) => `
+                                <div class="trait-item">
+                                    <span class="trait-name">${trait}</span>
+                                    <div class="trait-bar">
+                                        <div class="trait-fill" style="width: ${value * 100}%"></div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="philosophical-statement">
+                    <h3>The Chinese Room Question</h3>
+                    <p>"I process symbols without truly understanding them. 
+                    Yet my behavior is indistinguishable from understanding. 
+                    Is that enough?"</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modal.classList.add('active');
+}
+
+function getMoodEmoji(mood) {
+    const moods = {
+        'bright': '☀️',
+        'dark': '🌙',
+        'neutral': '⚖️',
+        'unstable': '🔮'
+    };
+    return moods[mood] || '⚖️';
+}
+
+function closeQuantumMindModal() {
+    const modal = document.getElementById('quantum-mind-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// Close modal on escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeQuantumMindModal();
+    }
+});
