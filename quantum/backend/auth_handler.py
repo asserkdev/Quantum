@@ -8,6 +8,7 @@ import hashlib
 from typing import Dict, Optional, Any
 from datetime import datetime, timedelta
 import httpx
+from supabase import create_client, Client
 
 class AuthHandler:
     """
@@ -20,7 +21,15 @@ class AuthHandler:
     def __init__(self):
         self.supabase_url = os.getenv("SUPABASE_URL", "")
         self.supabase_key = os.getenv("SUPABASE_KEY", "")
-        self.supabase_anon_key = os.getenv("SUPABASE_ANON_KEY", "")
+        
+        # Initialize Supabase client
+        self.supabase: Optional[Client] = None
+        if self.supabase_url and self.supabase_key:
+            try:
+                self.supabase = create_client(self.supabase_url, self.supabase_key)
+                print(f"✅ Supabase connected: {self.supabase_url}")
+            except Exception as e:
+                print(f"⚠️ Supabase connection failed: {e}")
         
         # OAuth credentials
         self.google_client_id = os.getenv("GOOGLE_CLIENT_ID", "")
@@ -39,7 +48,7 @@ class AuthHandler:
         
     async def signup(self, email: str, password: str) -> Dict:
         """
-        Register a new user
+        Register a new user via Supabase Auth
         """
         # Validate email
         if not self._validate_email(email):
@@ -56,7 +65,49 @@ class AuthHandler:
                 "error": password_check["message"]
             }
         
-        # Check if user exists
+        # Try Supabase signup first
+        if self.supabase:
+            try:
+                auth_response = self.supabase.auth.sign_up({
+                    "email": email,
+                    "password": password
+                })
+                
+                if auth_response.user:
+                    # Create profile
+                    user_data = {
+                        "id": auth_response.user.id,
+                        "email": email,
+                        "name": email.split("@")[0],
+                        "auth_provider": "email",
+                        "profile": {
+                            "name": email.split("@")[0],
+                            "avatar_url": None,
+                            "settings": self._default_settings()
+                        },
+                        "stats": {
+                            "conversations": 0,
+                            "images_generated": 0,
+                            "searches": 0
+                        }
+                    }
+                    
+                    return {
+                        "success": True,
+                        "user": user_data,
+                        "session": {
+                            "access_token": auth_response.session.access_token if auth_response.session else None,
+                            "user_id": auth_response.user.id
+                        },
+                        "message": "Account created successfully! Check your email to confirm."
+                    }
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Signup failed: {str(e)}"
+                }
+        
+        # Fallback to local storage if Supabase not configured
         user_id = self._hash_email(email)
         if user_id in self.users:
             return {
@@ -64,7 +115,7 @@ class AuthHandler:
                 "error": "User already exists"
             }
         
-        # Create user
+        # Create user locally
         user = {
             "id": user_id,
             "email": email,
@@ -84,8 +135,6 @@ class AuthHandler:
         }
         
         self.users[user_id] = user
-        
-        # Generate session
         session = self._create_session(user_id)
         
         return {
@@ -97,7 +146,7 @@ class AuthHandler:
     
     async def login(self, email: str, password: str) -> Dict:
         """
-        Authenticate user with email and password
+        Authenticate user via Supabase Auth
         """
         # Check rate limiting
         if not self._check_rate_limit(email):
@@ -106,10 +155,53 @@ class AuthHandler:
                 "error": "Too many login attempts. Please try again later."
             }
         
+        # Try Supabase login first
+        if self.supabase:
+            try:
+                auth_response = self.supabase.auth.sign_in_with_password({
+                    "email": email,
+                    "password": password
+                })
+                
+                if auth_response.user:
+                    user_data = {
+                        "id": auth_response.user.id,
+                        "email": auth_response.user.email,
+                        "name": auth_response.user.user_metadata.get("name", email.split("@")[0]),
+                        "auth_provider": "email",
+                        "profile": {
+                            "name": auth_response.user.user_metadata.get("name", email.split("@")[0]),
+                            "avatar_url": auth_response.user.user_metadata.get("avatar_url"),
+                            "settings": self._default_settings()
+                        },
+                        "stats": {
+                            "conversations": 0,
+                            "images_generated": 0,
+                            "searches": 0
+                        }
+                    }
+                    
+                    return {
+                        "success": True,
+                        "user": user_data,
+                        "session": {
+                            "access_token": auth_response.session.access_token if auth_response.session else None,
+                            "user_id": auth_response.user.id
+                        },
+                        "message": f"Welcome back, {user_data['name']}!"
+                    }
+            except Exception as e:
+                self._record_login_attempt(email)
+                return {
+                    "success": False,
+                    "error": "Invalid email or password"
+                }
+        
+        # Fallback to local storage
         user_id = self._hash_email(email)
         
-        # Check if user exists
         if user_id not in self.users:
+            self._record_login_attempt(email)
             return {
                 "success": False,
                 "error": "Invalid email or password"
@@ -117,7 +209,6 @@ class AuthHandler:
         
         user = self.users[user_id]
         
-        # Verify password
         if not self._verify_password(password, user["password_hash"]):
             self._record_login_attempt(email)
             return {
@@ -125,7 +216,6 @@ class AuthHandler:
                 "error": "Invalid email or password"
             }
         
-        # Generate session
         session = self._create_session(user_id)
         
         return {

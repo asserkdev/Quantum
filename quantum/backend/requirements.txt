@@ -9,3 +9,4 @@ bcrypt
 openai>=1.0.0
 python-dotenv
 aiofiles
+supabase>=2.0.0

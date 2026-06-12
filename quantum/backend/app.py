@@ -4,6 +4,11 @@ FastAPI server with all AI capabilities
 """
 
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
 import asyncio
 import json
 from datetime import datetime
