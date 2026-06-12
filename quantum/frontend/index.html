@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum - Autonomous AI Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <span class="logo-symbol">Q</span>
+                    </div>
+                    <span class="logo-text">Quantum</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <!-- User Section -->
+                <div class="user-section" id="userSection">
+                    <div class="user-avatar" id="userAvatar">
+                        <span>?</span>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name" id="userName">Guest User</span>
+                        <span class="user-status">Online</span>
+                    </div>
+                    <button class="auth-toggle" id="authToggle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10 17 15 12 10 7"/>
+                            <line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav-menu">
+                    <button class="nav-item active" data-view="chat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        <span>Chat</span>
+                    </button>
+                    <button class="nav-item" data-view="search">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <span>Web Search</span>
+                    </button>
+                    <button class="nav-item" data-view="fact-check">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <span>Fact Check</span>
+                    </button>
+                    <button class="nav-item" data-view="create">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <span>Create</span>
+                    </button>
+                    <button class="nav-item" data-view="3d">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z"/>
+                            <path d="M12 12l9-4.5"/>
+                            <path d="M12 12v9"/>
+                            <path d="M12 12L3 7.5"/>
+                        </svg>
+                        <span>3D Studio</span>
+                    </button>
+                    <button class="nav-item" data-view="goals">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="6"/>
+                            <circle cx="12" cy="12" r="2"/>
+                        </svg>
+                        <span>Goals</span>
+                    </button>
+                </nav>
+
+                <!-- Capabilities -->
+                <div class="capabilities-section">
+                    <h3>My Capabilities</h3>
+                    <div class="capability-tags">
+                        <span class="cap-tag" title="Web Search">🔍</span>
+                        <span class="cap-tag" title="Fact Checking">✅</span>
+                        <span class="cap-tag" title="Image Generation">🎨</span>
+                        <span class="cap-tag" title="3D Creation">🎮</span>
+                        <span class="cap-tag" title="Code Writing">💻</span>
+                        <span class="cap-tag" title="Self Learning">🧠</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="autonomous-indicator" id="autonomousIndicator">
+                    <div class="indicator-dot"></div>
+                    <span>Autonomous Mode</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Chat View -->
+            <div class="view active" id="chatView">
+                <div class="chat-header">
+                    <h1>Quantum</h1>
+                    <p>Your autonomous AI assistant with free will to help</p>
+                </div>
+                
+                <div class="chat-container" id="chatContainer">
+                    <div class="welcome-message" id="welcomeMessage">
+                        <div class="welcome-avatar">
+                            <span>Q</span>
+                        </div>
+                        <h2>Hello! I'm Quantum ✨</h2>
+                        <p>I'm an autonomous AI assistant ready to help you with:</p>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <span class="feature-icon">🔍</span>
+                                <h3>Research</h3>
+                                <p>Search and analyze any topic</p>
+                            </div>
+                            <div class="feature-card">
+                                <span class="feature-icon">✅</span>
+                                <h3>Fact Check</h3>
+                                <p>Verify news and detect fakes</p>
+                            </div>
+                            <div class="feature-card">
+                                <span class="feature-icon">🎨</span>
+                                <h3>Create</h3>
+                                <p>Generate images and 3D content</p>
+                            </div>
+                            <div class="feature-card">
+                                <span class="feature-icon">💻</span>
+                                <h3>Code</h3>
+                                <p>Write and debug code</p>
+                            </div>
+                        </div>
+                        <p class="welcome-tip">Just start typing and I'll help you with anything!</p>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="input-wrapper">
+                        <button class="attach-btn" id="attachBtn" title="Attach file">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                            </svg>
+                        </button>
+                        <input type="text" id="chatInput" placeholder="Ask Quantum anything..." autocomplete="off">
+                        <button class="mode-btn" id="modeBtn" title="Change mode">
+                            <span class="mode-icon">🎯</span>
+                        </button>
+                        <button class="send-btn" id="sendBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mode-selector" id="modeSelector">
+                        <button class="mode-option active" data-mode="auto">🎯 Auto</button>
+                        <button class="mode-option" data-mode="search">🔍 Search</button>
+                        <button class="mode-option" data-mode="fact">✅ Fact Check</button>
+                        <button class="mode-option" data-mode="image">🎨 Create</button>
+                        <button class="mode-option" data-mode="3d">🎮 3D</button>
+                        <button class="mode-option" data-mode="code">💻 Code</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search View -->
+            <div class="view" id="searchView">
+                <div class="view-header">
+                    <h1>🔍 Web Search & Research</h1>
+                    <p>Search the web with intelligent analysis and source verification</p>
+                </div>
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="searchInput" placeholder="What would you like to research?">
+                        <select id="searchDepth">
+                            <option value="basic">Basic</option>
+                            <option value="advanced">Advanced</option>
+                            <option value="deep">Deep Research</option>
+                        </select>
+                        <button class="search-btn" id="searchBtn">Search</button>
+                    </div>
+                    <div class="search-results" id="searchResults">
+                        <p class="results-placeholder">Enter a query to start researching...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fact Check View -->
+            <div class="view" id="factCheckView">
+                <div class="view-header">
+                    <h1>✅ Fact Checker</h1>
+                    <p>Verify claims and detect fake news with source analysis</p>
+                </div>
+                <div class="fact-check-container">
+                    <div class="claim-input-wrapper">
+                        <textarea id="claimInput" placeholder="Enter a claim to verify..."></textarea>
+                        <button class="verify-btn" id="verifyBtn">Verify Claim</button>
+                    </div>
+                    <div class="verdict-display" id="verdictDisplay">
+                        <div class="verdict-placeholder">
+                            <span class="verdict-icon">🔍</span>
+                            <p>Enter a claim above to check its accuracy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create View -->
+            <div class="view" id="createView">
+                <div class="view-header">
+                    <h1>🎨 Creative Studio</h1>
+                    <p>Generate images and creative content from your imagination</p>
+                </div>
+                <div class="create-container">
+                    <div class="create-input-wrapper">
+                        <textarea id="imagePrompt" placeholder="Describe the image you want to create..."></textarea>
+                        <div class="style-selector">
+                            <select id="imageStyle">
+                                <option value="realistic">Realistic</option>
+                                <option value="artistic">Artistic</option>
+                                <option value="anime">Anime</option>
+                                <option value="3d-render">3D Render</option>
+                                <option value="abstract">Abstract</option>
+                                <option value="cyberpunk">Cyberpunk</option>
+                                <option value="fantasy">Fantasy</option>
+                            </select>
+                            <select id="imageSize">
+                                <option value="512x512">Small (512×512)</option>
+                                <option value="1024x1024">Medium (1024×1024)</option>
+                                <option value="1024x1792">Portrait</option>
+                                <option value="1792x1024">Landscape</option>
+                            </select>
+                        </div>
+                        <button class="generate-btn" id="generateBtn">Generate Image</button>
+                    </div>
+                    <div class="image-display" id="imageDisplay">
+                        <div class="image-placeholder">
+                            <span class="placeholder-icon">🖼️</span>
+                            <p>Your generated images will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D Studio View -->
+            <div class="view" id="3dView">
+                <div class="view-header">
+                    <h1>🎮 3D Studio</h1>
+                    <p>Create stunning 3D scenes and animations</p>
+                </div>
+                <div class="3d-container">
+                    <div class="3d-canvas-container">
+                        <div id="3dCanvas"></div>
+                        <div class="3d-controls">
+                            <button class="3d-control-btn" id="resetCamera">Reset View</button>
+                            <button class="3d-control-btn" id="toggleAnimation">Toggle Animation</button>
+                        </div>
+                    </div>
+                    <div class="3d-input-wrapper">
+                        <textarea id="3dPrompt" placeholder="Describe your 3D scene (e.g., 'floating geometric shapes in space')..."></textarea>
+                        <div class="3d-options">
+                            <select id="3dStyle">
+                                <option value="realistic">Realistic</option>
+                                <option value="abstract">Abstract</option>
+                                <option value="sci-fi">Sci-Fi</option>
+                                <option value="fantasy">Fantasy</option>
+                            </select>
+                        </div>
+                        <button class="create-scene-btn" id="createSceneBtn">Create 3D Scene</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals View -->
+            <div class="view" id="goalsView">
+                <div class="view-header">
+                    <h1>🎯 Autonomous Goals</h1>
+                    <p>Set goals and let Quantum work toward achieving them</p>
+                </div>
+                <div class="goals-container">
+                    <div class="goal-input-wrapper">
+                        <input type="text" id="goalInput" placeholder="What's your goal?">
+                        <button class="set-goal-btn" id="setGoalBtn">Set Goal</button>
+                    </div>
+                    <div class="goals-list" id="goalsList">
+                        <div class="no-goals">
+                            <span>🎯</span>
+                            <p>No active goals. Set one above to get started!</p>
+                        </div>
+                    </div>
+                    <div class="autonomous-status" id="autonomousStatus">
+                        <h3>Autonomous System Status</h3>
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <span class="status-label">Active Goals</span>
+                                <span class="status-value" id="activeGoalsCount">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Learning Mode</span>
+                                <span class="status-value status-on">ON</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Capabilities</span>
+                                <span class="status-value">8</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Self Improvement</span>
+                                <span class="status-value status-on">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to Quantum</h2>
+                <button class="modal-close" id="closeAuthModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Login</button>
+                    <button class="auth-tab" data-tab="signup">Sign Up</button>
+                </div>
+                <div class="auth-form" id="loginForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••">
+                    </div>
+                    <button class="auth-submit" id="loginSubmit">Login</button>
+                    <div class="oauth-divider"><span>or continue with</span></div>
+                    <div class="oauth-buttons">
+                        <button class="oauth-btn google" id="googleLogin">
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Google
+                        </button>
+                        <button class="oauth-btn azure" id="azureLogin">
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="#0078D4" d="M11.4 0H0v11.4h11.4V0zM24 0H12.6v11.4H24V0zM11.4 12.6H0V24h11.4V12.6zM24 12.6H12.6V24H24V12.6z"/>
+                            </svg>
+                            Azure AD
+                        </button>
+                    </div>
+                </div>
+                <div class="auth-form hidden" id="signupForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signupEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="signupConfirm" placeholder="••••••••">
+                    </div>
+                    <button class="auth-submit" id="signupSubmit">Create Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
