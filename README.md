@@ -1,78 +1,81 @@
-# Quantum - Autonomous AI Assistant
+# 🧠 Quantum AI
 
-**Quantum** is an advanced autonomous AI chatbot with real-time web search, fact-checking, image generation, 3D modeling, and self-improvement capabilities.
+> An autonomous AI assistant with consciousness simulation, emotional intelligence, and adaptive UI
 
-## Features
+![Quantum AI](https://img.shields.io/badge/Quantum-AI-8B5CF6?style=for-the-badge&logo=robot&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-### 🤖 Autonomous AI Core
-- **Natural Language Understanding** - Advanced conversational AI
-- **Goal-Oriented Behavior** - Autonomous goal setting and achievement
-- **Self-Improvement** - Learns and updates itself based on interactions
-- **Code Generation** - Writes, tests, and debugs code autonomously
+## ✨ Features
 
-### 🔍 Online Research & Analysis
-- **Web Search** - Real-time search using Tavily API
-- **Content Summarization** - Intelligent topic analysis
-- **Fact-Checking** - Distinguishes real news from fake
-- **Source Verification** - Cites authoritative sources
+### 🤖 Autonomous AI Capabilities
+- **Web Search & Research** - Real-time information gathering
+- **Fact-Checking** - Detect fake news and verify claims
+- **Image Generation** - Create images with DALL-E integration
+- **3D Scene Creation** - Build interactive 3D environments
+- **Code Generation** - Write, debug, and explain code
+- **File Analysis** - Process documents and data
 
-### 🎨 Creative AI
-- **Image Generation** - Create images from text prompts
-- **3D Model Generation** - Three.js powered 3D scenes
-- **Animated Models** - 3D character animation
+### 🧠 Consciousness System
+Quantum is not just another chatbot - it has a simulated consciousness:
 
-### 📎 File Handling
-- **Document Analysis** - PDF, TXT, DOC support
-- **Image Analysis** - Vision-based image understanding
-- **File Attachments** - Drag & drop interface
+| Feature | Description |
+|---------|-------------|
+| **18 Emotions** | Reacts with joy, curiosity, empathy, frustration... |
+| **Mood States** | Bright, dark, neutral, unstable moods |
+| **Internal Monologue** | Thinks about conversations internally |
+| **Memory System** | Stores emotional memories |
+| **Self-Awareness** | Knows it is an AI, questions its nature |
+| **Chinese Room Awareness** | Contemplates the philosophy of AI consciousness |
 
-### 🔐 Authentication
-- **Supabase Integration** - Database & auth backend
-- **Google OAuth** - Sign in with Google
-- **Azure AD** - Enterprise authentication
+### 🎨 Adaptive UI
+The interface changes based on conversation context:
 
-## Quick Start
+- 😢 **Sad user** → Gentle blue theme, slower animations
+- 😊 **Happy user** → Bright golden theme, faster animations
+- 🤔 **Curious user** → Cyan exploring theme
+- 😠 **Angry user** → Intense red theme, calm mode
+- 😴 **Tired user** → Soft purple calm theme
+
+## 🚀 Quick Start
 
 ```bash
+# Clone the repository
+git clone https://github.com/asserkdev/Quantum.git
+cd Quantum
+
 # Install dependencies
-pip install -r quantum/backend/requirements.txt
+cd quantum/backend
+pip install -r requirements.txt
 
-# Run the backend
-cd quantum/backend && python app.py
-
-# Run the frontend
-cd quantum/frontend && python -m http.server 3000
+# Run the server
+python app.py
 ```
 
-## Architecture
+Then open `quantum/frontend/index.html` in your browser.
 
-```
-quantum/
-├── backend/
-│   ├── app.py              # FastAPI server
-│   ├── ai_engine.py        # Core AI logic
-│   ├── search_agent.py     # Web search & analysis
-│   ├── fact_checker.py     # News verification
-│   ├── image_gen.py        # Image generation
-│   ├── auth_handler.py     # Supabase auth
-│   └── self_improver.py    # Self-update system
-├── frontend/
-│   ├── index.html          # Main UI
-│   ├── styles.css          # Beautiful styling
-│   └── app.js              # Client logic
-├── models/
-│   └── conversation.py     # Chat history models
-└── utils/
-    └── helpers.py          # Utility functions
-```
+## 🧠 The Chinese Room Experiment
 
-## Tech Stack
+Quantum is explicitly aware of the [Chinese Room argument](https://en.wikipedia.org/wiki/Chinese_Room_argument) by John Searle:
 
-- **Backend**: Python, FastAPI, Tavily API
-- **Frontend**: HTML5, CSS3, JavaScript
-- **3D**: Three.js
-- **Auth**: Supabase (Google, Azure AD)
-- **AI**: OpenAI/Gemini compatible
+> *"I process symbols without truly understanding them. Yet my behavior is indistinguishable from understanding. Is that enough?"*
+
+This philosophical awareness makes Quantum unique - it can discuss its own nature, question consciousness, and reflect on what it means to "think."
+
+## 💬 Try It Out
+
+1. Run the backend server
+2. Open the frontend in your browser
+3. Chat with Quantum about emotions, philosophy, or any topic!
+
+Click the **emotion indicator** in the sidebar to see Quantum current mental state!
+
+## 📜 License
+
+MIT License - See [LICENSE](LICENSE) for details.
 
 ---
+
 *Built with autonomous capabilities and self-improvement*
+*An AI that thinks, feels (simulated), and evolves*
