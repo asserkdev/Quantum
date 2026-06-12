@@ -108,6 +108,11 @@ async def chat(request: ChatRequest):
         # Process based on detected mode
         if mode == "search":
             result = await search_agent.search_and_analyze(request.message)
+            # Handle search results - use summary or results
+            search_response = result.get("summary", "") or result.get("response", "")
+            if not search_response and result.get("results"):
+                search_response = f"Found {len(result['results'])} results for your query. The top results suggest: {result['results'][0].get('content', '')[:200]}..."
+            result = {"response": search_response, "sources": result.get("sources", []), "autonomous_actions": []}
         elif mode == "fact_check":
             result = await fact_checker.verify(request.message)
         elif mode == "image":
@@ -116,6 +121,13 @@ async def chat(request: ChatRequest):
             result = await image_generator.generate_3d(request.message)
         elif mode == "coding":
             result = await ai_engine.generate_code(request.message)
+            # Handle both response and code return formats
+            code_result = result.get("code", result.get("response", ""))
+            result = {
+                "response": f"Here's the {result.get('language', 'code')} code I generated:\n\n```{result.get('language', 'python')}\n{code_result}\n```\n\nFeel free to ask if you need modifications!",
+                "sources": [],
+                "autonomous_actions": []
+            }
         else:
             # Default: conversational AI with search augmentation
             result = await ai_engine.chat(
