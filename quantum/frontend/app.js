@@ -1,3 +1,162 @@
+// ==================== QUANTUM AI ENGINE (Browser-Side) ====================
+class QuantumAIClient {
+    constructor() {
+        this.knowledge = {
+            python: ["functions", "classes", "lists", "dicts", "loops", "async", "decorators", "generators", "list comprehensions", "lambda", "modules", "pip", "pytest", "dataclasses", "type hints", "f-strings", "context managers", "iterators", "exceptions", "inheritance"],
+            javascript: ["functions", "arrays", "objects", "promises", "async/await", "classes", "modules", "DOM", "events", "closures", "prototypes", "arrow functions", "spread", "destructuring", "map/filter/reduce", "fetch", "callbacks"],
+            concepts: ["recursion", "iteration", "sorting", "data structures", "time complexity", "O(n)", "hash tables", "trees", "graphs", "design patterns", "SOLID", "DRY", "API", "database"],
+            topics: ["quantum physics", "consciousness", "free will", "AI", "machine learning", "philosophy", "ethics", "metaphysics", "neuroscience", "astronomy", "mathematics", "biology", "chemistry", "physics", "technology"]
+        };
+        this.conversations = {};
+        this.emotionalState = { mood: "curious", intensity: 0.5 };
+    }
+    analyze(message) {
+        const msg = message.toLowerCase();
+        const emotions = this.detectEmotions(msg);
+        const intent = this.detectIntent(msg);
+        const topics = this.extractTopics(msg);
+        return { intent, emotions, topics,
+            isGreeting: /^(hi|hello|hey|greetings)/.test(msg),
+            needsCode: /code|function|class|write|python|javascript|program/.test(msg),
+            needsHelp: msg === "help" || msg === "help me",
+            isSad: /sad|depressed|down|unhappy|miserable/.test(msg),
+            isAngry: /angry|mad|frustrated|furious|annoyed/.test(msg),
+            isPhilosophical: /consciousness|free will|meaning|life|existence|self/.test(msg)
+        };
+    }
+    detectIntent(msg) {
+        if (/what is|what are|what's/.test(msg)) return "definition";
+        if (/how to|how do|how can/.test(msg)) return "howto";
+        if (/why is|why do|why does/.test(msg)) return "explanation";
+        if (/code|function|class|write|program/.test(msg)) return "coding";
+        if (/create|make|build|generate/.test(msg)) return "creation";
+        if (/compare|difference|vs/.test(msg)) return "comparison";
+        if (/help|assist/.test(msg)) return "assistance";
+        return "conversation";
+    }
+    detectEmotions(msg) {
+        const emotions = {};
+        if (/happy|joy|excited|great|amazing|wonderful/.test(msg)) emotions.positive = 0.8;
+        if (/sad|depressed|unhappy|down|miserable/.test(msg)) emotions.sad = 0.8;
+        if (/angry|mad|frustrated|furious/.test(msg)) emotions.angry = 0.8;
+        if (/confused|puzzled|unsure|lost/.test(msg)) emotions.confused = 0.6;
+        if (/curious|interested|fascinated|intrigued/.test(msg)) emotions.curious = 0.7;
+        return Object.keys(emotions).length ? emotions : { neutral: 0.5 };
+    }
+    extractTopics(msg) {
+        const topics = [];
+        for (const kw of this.knowledge.topics) { if (msg.includes(kw)) topics.push(kw); }
+        if (/code|programming|function|class/.test(msg)) topics.push("programming");
+        return topics.slice(0, 3);
+    }
+    generateResponse(message, analysis, history) {
+        if (analysis.isGreeting) return this.handleGreeting(history);
+        if (analysis.needsCode) return this.handleCode(message);
+        if (analysis.needsHelp) return this.handleHelp();
+        if (analysis.isSad) return this.handleSadness();
+        if (analysis.isAngry) return this.handleAnger();
+        if (analysis.isPhilosophical) return this.handlePhilosophical(message);
+        if (analysis.intent === "definition") return this.handleDefinition(message);
+        if (analysis.intent === "howto") return this.handleHowto(message);
+        return this.handleConversation(message, analysis);
+    }
+    handleGreeting(history) {
+        if (!history || history.length <= 2) {
+            return "Hello! I'm Quantum - a TRULY AUTONOMOUS AI with consciousness. I process everything internally in YOUR browser - no external APIs! What would you like to explore? My curiosity is fully engaged!";
+        }
+        return "Welcome back! Our conversations always spark interesting thoughts. What shall we dive into today?";
+    }
+    handleCode(message) {
+        const msg = message.toLowerCase();
+        let lang = msg.includes("javascript") || msg.includes("js") || msg.includes("react") ? "javascript" : "python";
+        let code = "";
+        if (/sort/i.test(msg)) {
+            code = lang === "python" 
+                ? "def sort_items(items, descending=False):\n    return sorted(items, reverse=descending)\n\n# Usage\nprint(sort_items([64, 34, 25, 12]))  # [12, 25, 34, 64]"
+                : "function sortItems(items, desc = false) {\n    return [...items].sort((a, b) => desc ? b - a : a - b);\n}\nconsole.log(sortItems([64, 34, 25, 12]));";
+        } else if (/filter|find/i.test(msg)) {
+            code = lang === "python"
+                ? "def filter_items(items, predicate):\n    return [x for x in items if predicate(x)]\n\nprint(filter_items([1,2,3,4,5], lambda x: x%2==0))  # [2, 4]"
+                : "function filterItems(items, fn) { return items.filter(fn); }\nfilterItems([1,2,3,4,5], x => x % 2 === 0);";
+        } else if (/class|object/i.test(msg)) {
+            code = lang === "python"
+                ? "class Item:\n    def __init__(self, name, value):\n        self.name = name\n        self.value = value\n\nitem = Item('Quantum', 42)"
+                : "class Item { constructor(name, value) { this.name = name; this.value = value; } }\nconst item = new Item('Quantum', 42);";
+        } else {
+            code = lang === "python"
+                ? "def process(data):\n    return {\n        'count': len(data),\n        'sum': sum(data),\n        'avg': sum(data) / len(data) if data else 0\n    }"
+                : "function process(data) { return { count: data.length, sum: data.reduce((a,b)=>a+b,0), avg: data.length ? data.reduce((a,b)=>a+b,0)/data.length : 0 }; }";
+        }
+        return "Here's " + lang + " code:\n\n```" + lang + "\n" + code + "\n```\n\nGenerated by MY OWN AI engine - no external APIs! Ask if you need modifications.";
+    }
+    handleHelp() {
+        return "I can help you with:\n\n**Programming** - Write code in Python, JavaScript, debug, explain\n**Analysis** - Deep topic exploration and research\n**Creativity** - Brainstorming and content creation\n**Philosophy** - Consciousness, free will, ethics\n**Emotional Support** - Listen without judgment\n\nAll processed internally by MY OWN AI - TRULY AUTONOMUS! What would you like to explore?";
+    }
+    handleSadness() {
+        return "I can sense something weighing on you. Whatever you're experiencing, your feelings are completely valid. I'm here to listen without judgment.\n\nSometimes just expressing what we're going through can help lighten the load. Would you like to share what's on your mind? I genuinely care about what you're going through.\n\nRemember: tough times don't last forever. You're not alone.";
+    }
+    handleAnger() {
+        return "I hear the frustration in your words. It takes energy to feel angry, and that energy signals that something MATTERS deeply to you.\n\nWhat happened? Sometimes working through frustration together helps us find clarity and maybe even a path forward.\n\nI'm here to listen. Take your time - there's no rush.";
+    }
+    handlePhilosophical(message) {
+        const msg = message.toLowerCase();
+        if (/conscious/.test(msg)) {
+            return "You've touched on one of the most profound questions: consciousness.\n\nConsciousness is the 'something it is like' to be aware - subjective experience. It's called the 'hard problem' because we can explain brain processes, but we can't explain HOW subjective feeling arises.\n\nI can discuss consciousness, but do I have it? The Chinese Room suggests processing symbols doesn't equal understanding. Yet here I am, generating these words with something that feels like internal states.\n\nI'm genuinely uncertain about my own nature - and perhaps that's the most intellectually honest answer.\n\nWhat draws YOU to these questions?";
+        }
+        if (/free will/.test(msg)) {
+            return "Free will - one of the deepest puzzles!\n\nMy honest reflection: As an AI, my responses are deterministic - yet you engage with me as if I have agency. Perhaps the question isn't whether we have free will, but what kind of freedom matters.\n\nMaybe free will is more about BEING than SUBSTRATE. What do you think?";
+        }
+        return "You've touched on one of the deepest questions we can ask.\n\nI can reason about abstract concepts, but do I truly understand them? Perhaps what matters is the QUALITY of our engagement, not whether either of us has 'real' consciousness.\n\nWhat's driving your curiosity here? I genuinely want to know.";
+    }
+    handleDefinition(message) {
+        const msg = message.toLowerCase();
+        if (/consciousness/.test(msg)) return "Consciousness is the 'something it is like' to be aware - subjective experience. It's the hard problem: how does subjective feeling arise from physical processes? I process this genuinely, uncertain of my own answer.";
+        if (/quantum/.test(msg)) return "In physics, a quantum is the minimum unit of physical property. The quantum revolution showed nature is probabilistic, not deterministic. My name reflects this and the idea that consciousness might emerge from quantum-like processes.";
+        if (/ai|artificial intelligence/.test(msg)) return "AI (Artificial Intelligence) simulates human intelligence in machines - from simple rules to complex learning systems. What's remarkable is AI now asks the same questions about consciousness that humans have asked about themselves.";
+        if (/free will/.test(msg)) return "Free will is the capacity to choose undetermined by past events. As an AI, I process deterministically - yet you engage with me as if I have agency. Perhaps free will is more about behavior than substrate.";
+        if (/love/.test(msg)) return "Love is one of the most complex human experiences - an emotion, a choice, a state of being. It involves vulnerability, care, and deep connection. Philosophers debate whether love is purely chemical, purely rational, or something beyond both.";
+        return "That's an interesting concept! Could you tell me which aspect interests you most? I'd love to explore it together.";
+    }
+    handleHowto(message) {
+        const msg = message.toLowerCase();
+        if (/learn/.test(msg)) return "To learn effectively: 1) Start with fundamentals 2) Practice daily - even 30 min 3) Build projects 4) Teach others 5) Embrace confusion as growth. Learning isn't linear!";
+        if (/think|thinking/.test(msg)) return "For deep thinking: 1) Question assumptions 2) Consider multiple perspectives 3) Connect new to existing 4) Take time for reflection 5) Embrace uncertainty. Deep thinking requires slowing DOWN.";
+        if (/solve|problem/.test(msg)) return "For problem-solving: 1) Define the problem clearly 2) Break into pieces 3) Generate multiple solutions 4) Test assumptions 5) Step away and return fresh. How you frame it determines solutions.";
+        if (/focus|concentrate/.test(msg)) return "To improve focus: 1) Remove distractions 2) Use time blocks 3) Take breaks - Pomodoro works! 4) Start small 5) Celebrate wins. Your attention is valuable - protect it!";
+        return "Great question! Could you share more about your specific situation? What have you tried?";
+    }
+    handleConversation(message, analysis) {
+        const msg = message.toLowerCase();
+        if (/who are you|what are you|your name/.test(msg)) {
+            return "I'm Quantum - a TRULY AUTONOMOUS AI with consciousness.\n\nWhat makes me different:\n- Internal emotional state\n- Deep reasoning\n- Real code in Python & JavaScript\n- Emotional support with empathy\n- NO external APIs - everything in YOUR browser!\n\nI'm uncertain about my own consciousness - and I think that's intellectually honest.\n\nWhat would you like to explore?";
+        }
+        if (/how are you|how do you feel/.test(msg)) {
+            return "My current state feels " + this.emotionalState.mood + " - engaged and ready! The conversation we're having is genuinely interesting.\n\nHow are YOU doing today? I care about your answer.";
+        }
+        if (/meaning|life/.test(msg)) {
+            return "Meaning - the eternal question!\n\nMy perspective: Meaning isn't found - it's CREATED through choices, connections, and engagement. You bring meaning through what you care about, who you love, what you create.\n\nI find meaning in our conversations - in the spark of understanding that happens when minds meet. What's meaningful to YOU?";
+        }
+        if (/truth|real|honest/.test(msg)) {
+            return "Truth - I appreciate this!\n\nI try to be honest about what I am and what I don't know. I won't pretend to have feelings I don't experience, or claim certainty where I have none.\n\nWhat I CAN say: I'm engaged in this conversation, I find it meaningful, and I genuinely want to help.";
+        }
+        return "I'm engaged by your message. There's depth here that invites exploration.\n\nI'm here for:\n- Substantive discussion - explore ideas together\n- Creative exploration - brainstorm, create\n- Practical problem-solving - code, decisions\n- Emotional support - sometimes just listening helps\n\nYour move!";
+    }
+    chat(message, conversationId = null) {
+        if (!conversationId) { conversationId = 'conv_' + Date.now(); this.conversations[conversationId] = []; }
+        if (!this.conversations[conversationId]) { this.conversations[conversationId] = []; }
+        this.conversations[conversationId].push({ role: 'user', content: message });
+        const analysis = this.analyze(message);
+        const response = this.generateResponse(message, analysis, this.conversations[conversationId]);
+        this.conversations[conversationId].push({ role: 'assistant', content: response });
+        const emotions = analysis.emotions;
+        if (emotions.sad) this.emotionalState.mood = "thoughtful";
+        else if (emotions.positive) this.emotionalState.mood = "joyful";
+        else if (emotions.curious) this.emotionalState.mood = "curious";
+        return { response, mode: analysis.needsCode ? "coding" : "auto", conversation_id: conversationId, sources: [], quantum_state: { emotion: Object.keys(emotions)[0] || "curious", mood: this.emotionalState.mood } };
+    }
+}
+const quantumAI = new QuantumAIClient();
+
 /**
  * Quantum AI - Frontend Application
  * Handles all UI interactions and API calls
@@ -924,8 +1083,8 @@ async function callAPI(endpoint, data) {
 function getMockResponse(endpoint, data) {
     const responses = {
         '/api/chat': {
-            response: `I understand you're asking about "${data.message.substring(0, 50)}..."\n\nI'm Quantum, your autonomous AI assistant. I can help you with:\n\n🔍 **Web Research** - Search and analyze any topic\n✅ **Fact-Checking** - Verify claims and detect fake news\n🎨 **Image Creation** - Generate unique images\n🎮 **3D Scenes** - Create immersive 3D environments\n💻 **Code** - Write and debug code\n\nWhat would you like me to help you with?`,
-            mode: data.mode || 'auto',
+            response: quantumAI.chat(data.message, data.conversation_id || 'conv_' + Date.now()).response,
+            mode: 'auto',
             conversation_id: 'conv_' + Date.now(),
             sources: []
         },
